@@ -1,0 +1,5 @@
+/venv/
+/.idea/
+/cmake-build-debug/
+/cmake-build-release/
+/SFML-2.5.1/
