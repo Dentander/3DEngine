@@ -4,8 +4,9 @@ layout (location = 0) out vec4 fragColor;
 uniform vec2 u_resolution;
 uniform vec3 u_camera_position;
 uniform vec2 u_camera_rotation;
+uniform vec3 u_background_color = vec3(0.5, 0.8, 0.9);
 
-const float FOV = 1.0;
+const float FOV = 1;
 const int MAX_STEPS = 256;
 const float MAX_DIST = 500;
 const float EPSILON = 0.001;
@@ -82,7 +83,7 @@ vec2 map(vec3 p) {
     vec2 sphere2 = vec2(sphereDist2, sphereMaterial2);
     // result
     vec2 result = unionMaterial(plane, sphere);
-    result = unionMaterial(result, sphere2);
+    //result = unionMaterial(result, sphere2);
     return result;
 }
 
@@ -112,13 +113,18 @@ vec3 getLight(vec3 p, vec3 rd, vec3 color) {
     vec3 lightPos = vec3(20.0, 40.0, -30.0);
     vec3 L = normalize(lightPos - p);
     vec3 N = getNormal(p);
+    vec3 V = -rd;
+    vec3 R = reflect(-L, N);
 
+    vec3 specColor = vec3(0.5);
+    vec3 specular = specColor * pow(clamp(dot(R, V), 0.0, 1), 10);
     vec3 diffuse = color * clamp(dot(L, N), 0, 1);
+    vec3 ambient = color * 0.05;
 
     // shadows
     float d = rayMarch(p + N * 0.02, normalize(lightPos)).x;
-    if (d < length(lightPos - p)) { return vec3(0); }
-    return diffuse;
+    if (d < length(lightPos - p)) { return ambient; }
+    return diffuse + ambient + specular;
 }
 
 vec3 myMix(vec3 a, vec3 b) {
@@ -141,13 +147,14 @@ vec3 getMaterial(vec3 p, vec3 rd, float material) {
         break;
 
         case 2:
-        m = vec3(0.0, 0.5, 0.5);
+        m = vec3(0.4 * mod(floor(p.x) + floor(p.z), 2.0) + 0.2);
         break;
+
         case 3:
-        m = vec3(0.9, 0.5, 0.5);
+        m = vec3(1, 0, 0);
         break;
     }
-    return normalize(m);
+    return m;
 }
 
 void render(inout vec3 color, in vec2 uv) {
@@ -160,6 +167,9 @@ void render(inout vec3 color, in vec2 uv) {
         vec3 p = ro + object.x * rd;
         vec3 material = getMaterial(p, rd, object.y);
         color += getLight(p, rd, material);
+        color = mix(color, u_background_color, 1 - exp(-0.0004 * object.x * object.x));
+    } else {
+        color = u_background_color - max(0.6 * rd.y, 0.0);
     }
 }
 

@@ -38,21 +38,9 @@ public:
     float SquaredLength() const { return x * x + y * y + z * z; }
     sf::Vector3f toSFML() { return sf::Vector3f(x, y, z); }
     vec3 rotate(float angle1, float angle2) {
-        float sinA1 = std::sin(angle1), cosA1 = std::cos(angle1);
-        float sinA2 = std::sin(-angle2), cosA2 = std::cos(-angle2);
-
-        /*tmp.z = z * cosA2 - x * sinA2;
-        tmp.x = z * sinA2 + x * cosA2;
-        tmp.y = y;
-
-        x = tmp.x * cosA1 + tmp.y * sinA1;
-        y = tmp.x * sinA2 + tmp.y * cosA1;
-        z = tmp.z;*/
-
+        y = x * std::sin(angle2);
         vec2<T> tmp1 = vec2<T>(x, z).rotate(angle1);
-        //vec2<T> tmp2 = vec2<T>(x, z).rotate(angle);
         x = tmp1.x, z = tmp1.y;
-
         return vec3(x, y, z);
     }
 };

@@ -1,8 +1,9 @@
-#include <engine/graphics/ParameterSystem.h>
+#include "engine/graphics/ParameterSystem.h"
 #include "engine/graphics/Engine.h"
 
 
 int main() {
+    std::cout << "Hello world!\n";
     Engine engine;
     engine.run();
     return EXIT_SUCCESS;
