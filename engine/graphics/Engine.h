@@ -1,17 +1,17 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include "../math/vec3.h"
-#include "../math/vec2.h"
 #include "Input.h"
 #include "Camera.h"
+#include "OutputShader.h"
+#include <SFML/Graphics.hpp>
+#include <engine/objects/Scene.h>
+#include <engine/math/vec3.h>
+
 
 class Engine {
 private:
-    sf::RenderTexture outputTexture;
-    sf::Sprite outputTextureSprite;
-    sf::Shader outputShader;
+    OutputShader shader;
 
-    Camera camera;
+    Scene scene;
 
     Input &input = Input::instance();
 
@@ -28,11 +28,6 @@ public:
 
     void run();
     void exit();
-
-    void setUniform(const std::string& name, vec2f vec);
-    void setUniform(const std::string& name, vec3f vec);
-    void setUniform(const std::string& name, float num);
-    void setUniform(const std::string& name, int num);
 
     int getWidth() const;
     int getHeight() const;

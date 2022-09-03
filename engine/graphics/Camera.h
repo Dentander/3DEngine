@@ -1,14 +1,12 @@
 #pragma once
-#include <engine/math/vec3.h>
+#include <variant>
 #include "Input.h"
 #include "Transform.h"
-#include "ParameterSystem.h"
-#include <variant>
+#include "OutputShader.h"
 
 
 class Camera {
 private:
-    ParameterSystem& params = ParameterSystem::instance();
     Input &input = Input::instance();
     PlayerControls &playerControls = PlayerControls::instance();
 
@@ -24,7 +22,7 @@ public:
 
     void update();
 
-    void setUniforms(sf::Shader &shader);
+    void setUniforms(OutputShader &shader);
     void setPosition(vec3f position);
     void setRotation(vec2f rotation);
     void addPosition(vec3f position);

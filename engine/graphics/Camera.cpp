@@ -1,6 +1,6 @@
 #include <cmath>
 #include "Camera.h"
-#define PI 3.14159265359
+
 
 Camera::Camera() {
 
@@ -61,8 +61,8 @@ void Camera::addRotation(vec2f _rotation) {
     rotation = rotation + _rotation;
 }
 
-void Camera::setUniforms(sf::Shader &shader) {
-    shader.setUniform("u_camera_position", getPosition().toSFML());
-    shader.setUniform("u_camera_rotation", getRotation().toSFML());
+void Camera::setUniforms(OutputShader &shader) {
+    shader.setUniform("u_camera_position", getPosition());
+    shader.setUniform("u_camera_rotation", getRotation());
 }
 

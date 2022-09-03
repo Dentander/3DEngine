@@ -5,14 +5,7 @@ Engine::Engine() {
     // ======== WINDOW ========
     window.create(sf::VideoMode(getWidth(), getHeight()), "3DEngine");
     window.setVerticalSyncEnabled(true);
-
-    // ======== SHADER ========
-    outputShader.loadFromFile("glsl/Fragment.glsl", sf::Shader::Fragment);
-    outputTexture.create(getWidth(), getHeight());
-    outputTextureSprite = sf::Sprite(outputTexture.getTexture());
-
-    setUniform("u_resolution", getSize());
-
+    shader.build(getSize());
 }
 
 void Engine::eventsUpdate() {
@@ -38,19 +31,14 @@ void Engine::eventsUpdate() {
 void Engine::update() {
     // ======== INPUT ========
     input.update(window);
-    camera.update();
-    camera.setUniforms(outputShader);
 
-    // ======== SHADER ========
-    outputTexture.create(getWidth(), getHeight());
-    outputTextureSprite = sf::Sprite(outputTexture.getTexture());
-    outputTexture.draw(outputTextureSprite, &outputShader);
+    // ======== SCENE ========
+    scene.update(shader);
 }
 
 void Engine::draw() {
     // ======== SHADER ========
-    outputTextureSprite.setPosition(0, 0);
-    window.draw(outputTextureSprite);
+    shader.draw(window);
 }
 
 void Engine::run() {
@@ -82,19 +70,3 @@ int Engine::getWidth() const { return width; }
 int Engine::getHeight() const { return height; }
 
 vec2f Engine::getSize() const { return vec2f((float)getWidth(), (float)getHeight()); }
-
-void Engine::setUniform(const std::string& name, vec2<float> vec) {
-    outputShader.setUniform(name, vec.toSFML());
-}
-
-void Engine::setUniform(const std::string& name, vec3<float> vec) {
-    outputShader.setUniform(name, vec.toSFML());
-}
-
-void Engine::setUniform(const std::string &name, int num) {
-    outputShader.setUniform(name, num);
-}
-
-void Engine::setUniform(const std::string &name, float num) {
-    outputShader.setUniform(name, num);
-}

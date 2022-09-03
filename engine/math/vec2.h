@@ -33,4 +33,5 @@ public:
         x = px, y = py;
         return vec2(x, y);
     }
+    std::string toMap() { return "vec2(" + std::to_string(x) + ", " + std::to_string(y) + ")"; }
 };

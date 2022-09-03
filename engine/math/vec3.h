@@ -43,4 +43,6 @@ public:
         x = tmp1.x, z = tmp1.y;
         return vec3(x, y, z);
     }
+
+    std::string toMap() { return "vec3(" + std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z) + ")"; }
 };
